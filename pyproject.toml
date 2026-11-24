@@ -1,0 +1,26 @@
+[project]
+name = "ai-bug-investigator"
+version = "0.1.0"
+description = "Агент, который разбирает ошибку, находит причину в GitHub-репозитории, чинит код и открывает Pull Request после одобрения человеком"
+requires-python = ">=3.12"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+testpaths = ["tests"]
+addopts = "-p no:cacheprovider"
+filterwarnings = ["ignore::DeprecationWarning"]
+
+[tool.ruff]
+line-length = 110
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "ASYNC", "S"]
+# ASYNC109: таймауты HTTP-клиентов передаются параметром осознанно.
+ignore = ["S101", "S311", "ASYNC109"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S105", "S106", "S603", "S607"]
+# /tmp в sandbox.py — tmpfs внутри одноразового контейнера песочницы, а не на хосте.
+"app/sandbox.py" = ["S108"]

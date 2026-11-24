@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Запуск — AI Bug Investigator{% endblock %}
+{% block content %}
+<section class="card" id="run" data-run-id="{{ run_id }}">
+  <div class="row">
+    <h1 id="run-title">Запуск</h1>
+    <span class="badge" id="run-status">…</span>
+  </div>
+  <p class="muted" id="run-meta"></p>
+  <p class="status-line" id="run-live"></p>
+</section>
+
+<section class="card" id="approval" hidden>
+  <h2>Нужно ваше решение</h2>
+  <dl class="facts">
+    <dt>Файл</dt><dd id="ap-file"></dd>
+    <dt>Причина</dt><dd id="ap-cause"></dd>
+    <dt>Исправление</dt><dd id="ap-expl"></dd>
+    <dt>Воспроизведение</dt><dd id="ap-repro"></dd>
+    <dt>Тесты</dt><dd id="ap-ci"></dd>
+    <dt>Самопроверка</dt><dd id="ap-verdict"></dd>
+    <dt>Security</dt><dd id="ap-security"></dd>
+  </dl>
+  <pre class="diff" id="ap-diff"></pre>
+  <p><a id="ap-compare" target="_blank" rel="noopener">Открыть изменения на GitHub</a></p>
+  <div id="ap-actions" class="actions">
+    <button class="primary" data-decision="true" data-testid="approve">Одобрить и создать PR</button>
+    <button class="danger" data-decision="false" data-testid="reject">Отклонить</button>
+  </div>
+  <p class="muted" id="ap-telegram" hidden>Запрос на одобрение отправлен в Telegram — решение принимается там.</p>
+</section>
+
+<section class="card" id="diagnosis" hidden data-testid="diagnosis">
+  <div class="row">
+    <h2>Диагноз по тексту ошибки</h2>
+    <span class="badge" id="dg-confidence"></span>
+  </div>
+  <p class="muted small">Гипотеза: код не читался, тесты не запускались. Укажите репозиторий, чтобы агент воспроизвёл
+    ошибку и проверил исправление.</p>
+  <dl class="facts">
+    <dt>Где</dt><dd id="dg-where"></dd>
+    <dt>Ошибка</dt><dd id="dg-error"></dd>
+    <dt>Кратко</dt><dd id="dg-summary"></dd>
+    <dt>Причина</dt><dd id="dg-cause" class="pre"></dd>
+    <dt>Как исправить</dt><dd><ol id="dg-steps" class="steps"></ol></dd>
+  </dl>
+  <div id="dg-code" hidden>
+    <h3>Пример исправления</h3>
+    <pre class="diff" id="dg-diff"></pre>
+  </div>
+  <dl class="facts">
+    <dt>Как проверить</dt><dd id="dg-verify" class="pre"></dd>
+    <dt>Цепочка вызовов</dt><dd><ol id="dg-frames" class="steps mono"></ol></dd>
+    <dt id="dg-more-label">Чего не хватает</dt><dd id="dg-more" class="pre"></dd>
+  </dl>
+</section>
+
+<section class="card" id="result" hidden>
+  <h2 id="res-title"></h2>
+  <p id="res-message" class="pre"></p>
+  <p><a id="res-pr" target="_blank" rel="noopener" hidden>Открыть Pull Request</a></p>
+</section>
+
+<section class="card">
+  <h2>Ход работы агента</h2>
+  <ol class="timeline" id="events"></ol>
+</section>
+{% endblock %}
+{% block scripts %}<script src="/static/run.js"></script>{% endblock %}

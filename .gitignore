@@ -1,0 +1,12 @@
+.env
+data/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.venv/
+.DS_Store
+
+# Локальные проекты пользователя
+local-projects/*
+!local-projects/README.md

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="card warn" id="config-warning" hidden data-testid="config-warning"></section>
+<section class="card">
+  <h1>Новая ошибка</h1>
+  <p class="muted">Агент воспроизведёт ошибку тестами в изолированной песочнице, найдёт причину, исправит код
+    и проверит исправление. Pull Request (или локальная ветка для <code>local:</code>-проектов) — только после вашего
+    одобрения.
+    Без репозитория агент по одному тексту ошибки скажет, где она и как её исправить (без проверки кодом).</p>
+  <form id="run-form" data-testid="run-form">
+    <label>Репозиторий <span class="muted">(необязательно)</span>
+      <input name="repo" placeholder="owner/name, local:папка — или пусто: только диагноз по тексту" autocomplete="off">
+    </label>
+    <label>Текст ошибки или стек-трейс
+      <textarea name="error_text" rows="9" required placeholder="Traceback (most recent call last): ..."></textarea>
+    </label>
+    <label>Telegram <span class="muted">(необязательно)</span>
+      <input name="telegram_chat_id" autocomplete="off" placeholder="@username или chat ID — одобрение придёт в Telegram, иначе на сайте">
+    </label>
+    <p class="muted small" id="tg-hint" hidden></p>
+    <p class="error" id="form-error" hidden></p>
+    <button type="submit" class="primary">Запустить агента</button>
+  </form>
+  <p class="muted small" id="service-info"></p>
+</section>
+
+<section class="card">
+  <h2>Последние запуски</h2>
+  <div id="runs" class="runs"><p class="muted">Загрузка…</p></div>
+</section>
+{% endblock %}
+{% block scripts %}<script src="/static/index.js"></script>{% endblock %}

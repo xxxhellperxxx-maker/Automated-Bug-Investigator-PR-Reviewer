@@ -1,0 +1,38 @@
+services:
+  app:
+    build:
+      context: .
+      target: runtime
+    env_file:
+      - path: .env
+        required: false
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - agent-data:/app/data
+      # Песочница запускает тесты в отдельных одноразовых контейнерах через Docker API.
+      # Доступ к сокету равен правам root на хосте — поэтому порт сервиса открыт только на localhost.
+      - /var/run/docker.sock:/var/run/docker.sock
+      # Локальный режим: git-проекты с компьютера, в форме — local:<имя папки>.
+      - ${LOCAL_PROJECTS_DIR:-./local-projects}:/projects
+    environment:
+      # Внутри контейнера папка всегда /projects; значение из .env — это путь на компьютере.
+      LOCAL_PROJECTS_DIR: /projects
+      LOCAL_PROJECTS_HOST_DIR: ${LOCAL_PROJECTS_DIR:-./local-projects}
+    group_add:
+      - "0"
+    restart: unless-stopped
+
+  tests:
+    profiles: ["test"]
+    build:
+      context: .
+      target: dev
+    volumes:
+      - .:/app
+    environment:
+      DATA_DIR: /tmp/data
+    command: ["pytest", "-q"]
+
+volumes:
+  agent-data:
